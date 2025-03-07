@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class NewsService {
-  final String apiKey = 'YOUR_NEWS_API_KEY';
+  final String apiKey = '6c88440fcfe74eafa7fb6177b35505b9';
   final String apiUrl =
       'https://newsapi.org/v2/top-headlines?country=us&apiKey=';
 
