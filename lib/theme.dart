@@ -38,7 +38,7 @@ ThemeData lightMode = ThemeData(
   colorScheme: lightColorScheme,
   elevatedButtonTheme: ElevatedButtonThemeData(
     style: ButtonStyle(
-      backgroundColor: MaterialStateProperty.all<Color>(Colors.black),
+      backgroundColor: MaterialStateProperty.all<Color>(Colors.blue),
       foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
       elevation: MaterialStateProperty.all<double>(5.0),
       padding: MaterialStateProperty.all<EdgeInsets>(

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:news_articles/auth/signup_page.dart';
 import 'package:news_articles/custom_scaffold.dart';
 import 'package:news_articles/theme.dart';
 
@@ -126,57 +127,117 @@ class _LogInScreenState extends State<LogInScreen> {
                       SizedBox(
                         width: double.infinity,
                         child: ElevatedButton(
-                         onPressed: () {
+                          onPressed: () {
+                             Navigator.pushReplacementNamed(
+                                context,
+                                'home_screen',
+                              );
                             if (_formSignInKey.currentState!.validate() &&
                                 rememberPassword) {
                               ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(content: Text('Processing Data')),
+                                SnackBar(content: Center(child: Text('Processing Data'))),
                               );
                             } else if (!rememberPassword) {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(
-                                  content:Text(
-                                  'Please agree to the Processing of personal'
+                                  content: Text(
+                                    'Please agree to the Processing of personal',
                                   ),
                                 ),
                               );
                             }
                           },
-                           child:Text("Log In"),
+                          child: Text("Log In"),
                         ),
-                       ),
-                       SizedBox(height:25.0),
-                       Row(
+                      ),
+                      SizedBox(height: 25.0),
+                      Row(
                         children: [
                           Expanded(
                             child: Divider(
-                              thickness:0.7,
-                              color:Colors.grey.withOpacity(0.5),
+                              thickness: 0.7,
+                              color: Colors.grey.withOpacity(0.5),
                             ),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.symmetric(
+                              vertical: 0,
+                              horizontal: 10,
                             ),
-                            Padding(
-                              padding:EdgeInsets.symmetric(
-                                vertical:0,
-                                horizontal:10,
-                              ),
-                              child:Text('Sign up with',
-                              style: TextStyle(
-                               color: Colors.black45,
-                              ),
-                              ),
+                            child: Text(
+                              'Sign up with',
+                              style: TextStyle(color: Colors.black45),
                             ),
-                            Expanded(
-                              child:Divider(
-                                thickness:0.7,
-                                color:Colors.grey.withOpacity(0.5),
-                              ),
-                              ),
-                             ],
-                           ),
-                      SizedBox(height:25.0),  
+                          ),
+                          Expanded(
+                            child: Divider(
+                              thickness: 0.7,
+                              color: Colors.grey.withOpacity(0.5),
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 25.0),
                       Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
-                         
+                          googleScreen(
+                            child: Image(
+                              image: AssetImage('assets/img/fb.png'),
+                            ),
+                            onPressed: () {},
+                            height: 30,
+                            width: 30,
+                          ),
+                          googleScreen(
+                            child: Image(
+                              image: AssetImage('assets/img/x1.png'),
+                            ),
+                            onPressed: () {},
+                            height: 45,
+                            width: 45,
+                          ),
+                          googleScreen(
+                            child: Image(
+                              image: AssetImage('assets/img/google.png'),
+                            ),
+                            onPressed: () {},
+                            height: 40,
+                            width: 40,
+                          ),
+                          googleScreen(
+                            child: Image(
+                              image: AssetImage('assets/img/apple1.png'),
+                            ),
+                            onPressed: () {},
+                            height: 40,
+                            width: 40,
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 25),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            'Don\'t have an account?',
+                            style: TextStyle(color: Colors.black45),
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.pushReplacementNamed(
+                                context,
+                                'home_screen',
+                              );
+                            },
+                            child: Text(
+                              'Sign up',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: lightColorScheme.primary,
+                              ),
+                            ),
+                          ),
                         ],
                       ),
                     ],
