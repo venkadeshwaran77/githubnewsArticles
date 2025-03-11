@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:news_articles/custom_scaffold.dart';
-import 'package:news_articles/theme.dart';
+
+import 'package:news_articles/thems/colors_theme.dart';
 
 class SignupScreen extends StatefulWidget {
   const SignupScreen({super.key});
@@ -157,7 +158,7 @@ class _SignupScreenState extends State<SignupScreen> {
                             if (_formSignUpKey.currentState!.validate() &&
                                 agreePersonalData) {
                               ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(content: Text('Processing Data')),
+                                SnackBar(content: Center(child: Text('Processing Data'))),
                               );
                             } else if (!agreePersonalData) {
                               ScaffoldMessenger.of(context).showSnackBar(

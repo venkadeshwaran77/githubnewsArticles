@@ -1,39 +1,66 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:news_articles/auth/login_page.dart';
 import 'package:news_articles/auth/signup_page.dart';
 import 'package:news_articles/home_screen.dart';
-import 'package:news_articles/theme.dart';
-import 'package:news_articles/thems/theme_provider.dart';
+import 'package:news_articles/provider/theme_provider.dart';
+import 'package:news_articles/thems/theme_data.dart'; 
 import 'package:news_articles/welcome_screen.dart';
+import 'package:provider/provider.dart';
 
 void main() {
-  WidgetsFlutterBinding.ensureInitialized();
-  SystemChrome.setPreferredOrientations([DeviceOrientation.landscapeLeft]).then(
-    (_) {
-      runApp(MyApp());
-    },
-  );
+  runApp(MyApp());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class MyApp extends StatefulWidget {
+  MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  ThemeProvider themeChangeProvider = ThemeProvider();
+
+  
+
+  @override
+  void initState() {
+    getCurrentAppTheme();
+    super.initState();
+  }
+  void getCurrentAppTheme() async {
+    themeChangeProvider.setDarkTheme =
+        await themeChangeProvider.darkThemePreferences.getTheme();
+  }
 
   @override
   Widget build(BuildContext context) {
-    bool _isDark = true;
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      theme: style.themeData(true, context),
-      
-      //home:WelcomeScreen(),
-      initialRoute: 'welcome_screen',
-      routes: {
-        'welcome_screen': (context) => WelcomeScreen(),
-        'login_screen': (context) => LogInScreen(),
-        'signup_screen': (context) => SignupScreen(),
-        'home_screen': (context) => NewsScreen(),
-      },
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (_) {
+            return themeChangeProvider;
+          },
+        ),
+      ],
+      child: Consumer<ThemeProvider>(
+        builder: (context, themeChangeProvider, ch) {
+          return MaterialApp(
+            debugShowCheckedModeBanner: false,
+            title:'Blog',
+            theme: style.themeData(themeChangeProvider.getDarkTheme, context),
+            
+            //home:WelcomeScreen(),
+            initialRoute: 'welcome_screen',
+            routes: {
+              'welcome_screen': (context) => WelcomeScreen(),
+              'login_screen': (context) => LogInScreen(),
+              'signup_screen': (context) => SignupScreen(),
+              'home_screen': (context) => NewsScreen(),
+            },
+          );
+        },
+      ),
     );
   }
 }

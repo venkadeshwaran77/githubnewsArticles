@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:news_articles/auth/login_page.dart';
 import 'package:news_articles/auth/signup_page.dart';
 import 'package:news_articles/custom_scaffold.dart';
-import 'package:news_articles/theme.dart';
+import 'package:news_articles/thems/colors_theme.dart';
 import 'package:news_articles/welcome_button.dart';
 
 class WelcomeScreen extends StatelessWidget {
