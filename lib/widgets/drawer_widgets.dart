@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_iconly/flutter_iconly.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:news_articles/provider/theme_provider.dart';
-
 import 'package:news_articles/widgets/verticle_spacing.dart';
 import 'package:provider/provider.dart';
 
@@ -16,6 +16,7 @@ class _DrawerWidgetsState extends State<DrawerWidgets> {
   @override
   Widget build(BuildContext context) {
     final themeProvider = Provider.of<ThemeProvider>(context);
+    themeProvider.getDarkTheme ? Colors.white : Colors.black;
     return Drawer(
       child: Material(
         color: Theme.of(context).scaffoldBackgroundColor,
@@ -35,42 +36,46 @@ class _DrawerWidgetsState extends State<DrawerWidgets> {
                   ),
                   VerticleSpacing(20),
 
-                  Flexible(child: Text('News app')),
+                  Flexible(
+                    child: Text(
+                      'News app',
+                      style: GoogleFonts.lobster(
+                        textStyle: TextStyle(fontSize: 20, letterSpacing: 0.6),
+                      ),
+                    ),
+                  ),
                 ],
               ),
             ),
             VerticleSpacing(20),
-            listTiles(
-              lable: 'Home', 
-              icon:IconlyBold.home,
-            fct: () {}
+            ListTilesWidget(lable: 'Home', 
+            icon: IconlyBold.home, fct: () {}),
+               ListTilesWidget(
+              lable: 'Bookmark',
+              icon: IconlyBold.bookmark,
+              fct: () {},
             ),
-             listTiles(
-              lable: 'Bookmark', 
-              icon:IconlyBold.bookmark,
-            fct: () {}
+            Divider(thickness: 5),
+            SwitchListTile(
+            title: Text(themeProvider.getDarkTheme ? 'Dark' : 'Light',
+            style:TextStyle(
+               fontSize:20,
             ),
-            Divider(thickness:5),
-             SwitchListTile(
-              title: Text(
-                themeProvider.getDarkTheme ?'Dark' : 'Light',
-                ),
-                
+              ),
               secondary: Icon(
                 themeProvider.getDarkTheme
                     ? Icons.dark_mode_outlined
                     : Icons.light_mode_outlined,
-                    color: Theme.of(context).colorScheme.secondary,
+                color: Theme.of(context).colorScheme.secondary,
               ),
-                value:themeProvider.getDarkTheme,
+              value: themeProvider.getDarkTheme,
               onChanged: (bool value) {
-              setState(() {
-                 themeProvider.setDarkTheme = value;
-               });
-               } ,  
-            
-          
-              ),
+                setState(() {
+                  themeProvider.setDarkTheme = value;
+                });
+              },
+              
+            ),
           ],
         ),
       ),
@@ -78,15 +83,21 @@ class _DrawerWidgetsState extends State<DrawerWidgets> {
   }
 }
 
-class listTiles extends StatelessWidget {
-  const listTiles({super.key, required this.lable, required this.fct, required this.icon});
+class ListTilesWidget extends StatelessWidget {
+  const ListTilesWidget({
+    super.key,
+    required this.lable,
+    required this.fct,
+    required this.icon,
+  });
   final String lable;
   final Function fct;
   final IconData icon;
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      leading: Icon(icon),
+      leading: Icon(icon,color: Theme.of(context).colorScheme.secondary),
+    
       title: Text(lable, style: TextStyle(fontSize: 20)),
       onTap: () {
         fct();
