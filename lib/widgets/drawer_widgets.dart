@@ -23,7 +23,7 @@ class _DrawerWidgetsState extends State<DrawerWidgets> {
         child: ListView(
           children: [
             DrawerHeader(
-              decoration: BoxDecoration(color: Theme.of(context).primaryColor),
+              decoration: BoxDecoration(color: Theme.of(context).cardColor),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -59,6 +59,7 @@ class _DrawerWidgetsState extends State<DrawerWidgets> {
             SwitchListTile(
             title: Text(themeProvider.getDarkTheme ? 'Dark' : 'Light',
             style:TextStyle(
+              color:Theme.of(context).hintColor,
                fontSize:20,
             ),
               ),
@@ -98,7 +99,12 @@ class ListTilesWidget extends StatelessWidget {
     return ListTile(
       leading: Icon(icon,color: Theme.of(context).colorScheme.secondary),
     
-      title: Text(lable, style: TextStyle(fontSize: 20)),
+      title: Text(lable,
+       style: TextStyle(
+        color:Theme.of(context).hintColor,
+        fontSize:20
+        ),
+        ),
       onTap: () {
         fct();
       },

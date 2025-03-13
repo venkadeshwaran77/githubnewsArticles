@@ -1,10 +1,13 @@
+import 'package:card_swiper/card_swiper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_iconly/flutter_iconly.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:news_articles/const/vars.dart';
 import 'package:news_articles/services/utiles.dart';
+import 'package:news_articles/widgets/articles_widgets.dart';
 import 'package:news_articles/widgets/drawer_widgets.dart';
 import 'package:news_articles/widgets/tabs.dart';
+import 'package:news_articles/widgets/top_trending_widget.dart';
 import 'package:news_articles/widgets/verticle_spacing.dart';
 
 class NewsScreen extends StatefulWidget {
@@ -20,6 +23,7 @@ class _NewsScreenState extends State<NewsScreen> {
   String sortBy = SortByEnum.publishedAt.name;
   @override
   Widget build(BuildContext context) {
+    Size size = Utils(context).getScreenSize;
     final Color color = Utils(context).getColor;
     return SafeArea(
       child: Scaffold(
@@ -150,20 +154,46 @@ class _NewsScreenState extends State<NewsScreen> {
                     ),
                   ),
               VerticleSpacing(10),
-              newsType == NewsType.topTrending? Container():Align(
-                alignment:Alignment.topRight,
-                child: Material(
-                  color:Theme.of(context).cardColor,
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal:10),
-                    child: DropdownButton(
-                      value: sortBy,
-                      items:dropDownItems,
-                      onChanged: (String? value) {},
+              newsType == NewsType.topTrending
+                  ? Container()
+                  : Align(
+                    alignment: Alignment.topRight,
+                    child: Material(
+                      color: Theme.of(context).cardColor,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 10),
+                        child: DropdownButton(
+                          value: sortBy,
+                          items: dropDownItems,
+                          onChanged: (String? value) {},
+                        ),
+                      ),
                     ),
                   ),
+              if (newsType == NewsType.allNews)
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: 20,
+                    itemBuilder: (context, index) {
+                      return ArticlesWidgets();
+                    },
+                  ),
                 ),
-              ),
+              if (newsType == NewsType.topTrending)
+                SizedBox(
+                  height:size.height *0.6,
+                  child: Swiper(
+                    autoplayDelay:8000,
+                    autoplay:true,
+                    itemWidth:size.width *0.9,
+                    layout: SwiperLayout.STACK,
+                    viewportFraction:0.9,
+                    itemCount: 5,
+                    itemBuilder: (context, index) {
+                      return TopTrendingWidget();
+                    },
+                  ),
+                ),
             ],
           ),
         ),
@@ -173,17 +203,29 @@ class _NewsScreenState extends State<NewsScreen> {
 
   List<DropdownMenuItem<String>> get dropDownItems {
     List<DropdownMenuItem<String>> menuItem = [
-      DropdownMenuItem(value:SortByEnum.relevancy.name,
-        child: Text(SortByEnum.relevancy.name)
+      DropdownMenuItem(
+        value: SortByEnum.relevancy.name,
+        child: Text(
+          SortByEnum.relevancy.name,
+          style: TextStyle(color: Theme.of(context).colorScheme.secondary),
         ),
-        DropdownMenuItem(value:SortByEnum.publishedAt.name,
-        child: Text(SortByEnum.publishedAt.name)
+      ),
+      DropdownMenuItem(
+        value: SortByEnum.publishedAt.name,
+        child: Text(
+          SortByEnum.publishedAt.name,
+          style: TextStyle(color: Theme.of(context).colorScheme.secondary),
         ),
-        DropdownMenuItem(value:SortByEnum.popularity.name,
-        child: Text(SortByEnum.popularity.name)
+      ),
+      DropdownMenuItem(
+        value: SortByEnum.popularity.name,
+        child: Text(
+          SortByEnum.popularity.name,
+          style: TextStyle(color: Theme.of(context).colorScheme.secondary),
         ),
+      ),
     ];
-  return menuItem;
+    return menuItem;
   }
 
   Widget paginationButtons({required Function function, required String text}) {
