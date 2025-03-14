@@ -3,12 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_iconly/flutter_iconly.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:news_articles/const/vars.dart';
+import 'package:news_articles/inner%20screens/search_screen.dart';
 import 'package:news_articles/services/utiles.dart';
 import 'package:news_articles/widgets/articles_widgets.dart';
 import 'package:news_articles/widgets/drawer_widgets.dart';
 import 'package:news_articles/widgets/tabs.dart';
 import 'package:news_articles/widgets/top_trending_widget.dart';
 import 'package:news_articles/widgets/verticle_spacing.dart';
+import 'package:page_transition/page_transition.dart';
 
 class NewsScreen extends StatefulWidget {
   const NewsScreen({super.key});
@@ -43,7 +45,19 @@ class _NewsScreenState extends State<NewsScreen> {
             ),
           ),
           actions: [
-            IconButton(onPressed: () {}, icon: Icon(IconlyLight.search)),
+            IconButton(
+              onPressed: () {
+                Navigator.push(
+                  context, PageTransition(
+                type: PageTransitionType.rightToLeft,
+                child:SearchScreen(),
+                inheritTheme:true,
+                ctx:context 
+                ),
+                );
+              },
+              icon: Icon(IconlyLight.search),
+            ),
           ],
         ),
         drawer: DrawerWidgets(),
@@ -181,19 +195,20 @@ class _NewsScreenState extends State<NewsScreen> {
                 ),
               if (newsType == NewsType.topTrending)
                 SizedBox(
-                  height:size.height *0.6,
+                  height: size.height * 0.6,
                   child: Swiper(
-                    autoplayDelay:8000,
-                    autoplay:true,
-                    itemWidth:size.width *0.9,
+                    autoplayDelay: 8000,
+                    autoplay: true,
+                    itemWidth: size.width * 0.9,
                     layout: SwiperLayout.STACK,
-                    viewportFraction:0.9,
+                    viewportFraction: 0.9,
                     itemCount: 5,
                     itemBuilder: (context, index) {
                       return TopTrendingWidget();
                     },
                   ),
                 ),
+              //LoadingWidgets(newsType:newsType),
             ],
           ),
         ),

@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_iconly/flutter_iconly.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:news_articles/inner%20screens/bookmark_screen.dart';
 import 'package:news_articles/provider/theme_provider.dart';
 import 'package:news_articles/widgets/verticle_spacing.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 
 class DrawerWidgets extends StatefulWidget {
@@ -53,7 +55,16 @@ class _DrawerWidgetsState extends State<DrawerWidgets> {
                ListTilesWidget(
               lable: 'Bookmark',
               icon: IconlyBold.bookmark,
-              fct: () {},
+              fct: () {
+                 Navigator.push(
+                  context, PageTransition(
+                type: PageTransitionType.rightToLeft,
+                child:BookmarkScreen(),
+                inheritTheme:true,
+                ctx:context
+                ),
+                );
+              },
             ),
             Divider(thickness: 5),
             SwitchListTile(

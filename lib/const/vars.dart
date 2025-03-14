@@ -11,3 +11,17 @@ enum SortByEnum {
 
 TextStyle smallTextStyle = GoogleFonts.montserrat(fontSize: 15);
 
+List<String> searchKeywords = [
+  "Football",
+  "Cricket",
+  "kabbadi",
+  "Weather",
+  "Python",
+  "Flutter",
+  "DevOPS",
+  "Youtube",
+  "crypto",
+  "Bitcoin",
+  "Netflix",
+  "Meta"
+];
