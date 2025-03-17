@@ -1,8 +1,11 @@
 import 'package:fancy_shimmer_image/fancy_shimmer_image.dart';
 import 'package:flutter/material.dart';
 import 'package:news_articles/const/vars.dart';
+import 'package:news_articles/inner%20screens/blog_details.dart';
+import 'package:news_articles/inner%20screens/news_details_webview.dart';
 import 'package:news_articles/services/utiles.dart';
 import 'package:news_articles/widgets/verticle_spacing.dart';
+import 'package:page_transition/page_transition.dart';
 
 class ArticlesWidgets extends StatelessWidget {
   const ArticlesWidgets({super.key});
@@ -14,8 +17,10 @@ class ArticlesWidgets extends StatelessWidget {
       padding: const EdgeInsets.all(8.0),
       child: Material(
         color: Theme.of(context).cardColor,
-        child: InkWell(
-          onTap: () {},
+        child: GestureDetector(
+          onTap: () {
+            Navigator.pushNamed(context, NewsDetailsScreen.routeName);
+          },
           child: Stack(
             children: [
               Container(
@@ -44,6 +49,7 @@ class ArticlesWidgets extends StatelessWidget {
                         height: size.height * 0.12,
                         width: size.height * 0.12,
                         boxFit: BoxFit.fill,
+                        errorWidget:Image.asset('assets/img/emty.jpg'),
                         imageUrl:
                             "https://techcrunch.com/wp-content/uploads/2022/01/locket-app.jpg?resize=1536,864",
                       ),
@@ -54,12 +60,13 @@ class ArticlesWidgets extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          Text(' title ' * 100,
-                          textAlign:TextAlign.justify,
-                           style: smallTextStyle,
-                           maxLines:2,
-                           overflow:TextOverflow.ellipsis,
-                           ),
+                          Text(
+                            ' title ' * 100,
+                            textAlign: TextAlign.justify,
+                            style: smallTextStyle,
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                          ),
                           VerticleSpacing(5),
                           Align(
                             alignment: Alignment.topRight,
@@ -72,16 +79,23 @@ class ArticlesWidgets extends StatelessWidget {
                             child: Row(
                               children: [
                                 IconButton(
-                                  onPressed: () {},
-                                   icon:Icon(
-                                    Icons.link,
-                                    color:Colors.blue,
-                                ),
+                                  onPressed: () {
+                                    Navigator.push(
+                                      context,
+                                      PageTransition(
+                                        type: PageTransitionType.rightToLeft,
+                                        child: NewsDetailsWebview(),
+                                        inheritTheme: true,
+                                        ctx: context,
+                                      ),
+                                    );
+                                  },
+                                  icon: Icon(Icons.link, color: Colors.blue),
                                 ),
                                 Text(
-                                '13-03-2025 '*2 ,
-                                maxLines:1,
-                                style:smallTextStyle,
+                                  '13-03-2025 ' * 2,
+                                  maxLines: 1,
+                                  style: smallTextStyle,
                                 ),
                               ],
                             ),
