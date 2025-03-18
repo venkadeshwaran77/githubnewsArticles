@@ -8,8 +8,8 @@ import 'package:news_articles/widgets/verticle_spacing.dart';
 import 'package:page_transition/page_transition.dart';
 
 class ArticlesWidgets extends StatelessWidget {
-  const ArticlesWidgets({super.key});
-
+  const ArticlesWidgets({super.key, required this.imageUrl});
+  final String imageUrl;
   @override
   Widget build(BuildContext context) {
     Size size = Utils(context).getScreenSize;
@@ -49,9 +49,9 @@ class ArticlesWidgets extends StatelessWidget {
                         height: size.height * 0.12,
                         width: size.height * 0.12,
                         boxFit: BoxFit.fill,
-                        errorWidget:Image.asset('assets/img/emty.jpg'),
+                        errorWidget: Image.asset('assets/img/emty.jpg'),
                         imageUrl:
-                            "https://techcrunch.com/wp-content/uploads/2022/01/locket-app.jpg?resize=1536,864",
+                            imageUrl,
                       ),
                     ),
                     SizedBox(width: 10),
