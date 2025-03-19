@@ -1,5 +1,4 @@
 import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_iconly/flutter_iconly.dart';
 import 'package:news_articles/services/global_method.dart';
@@ -10,7 +9,8 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class NewsDetailsWebview extends StatefulWidget {
-  const NewsDetailsWebview({super.key});
+  const NewsDetailsWebview({super.key, required this.url});
+  final String url;
 
   @override
   State<NewsDetailsWebview> createState() => _NewsDetailsWebviewState();
@@ -19,8 +19,7 @@ class NewsDetailsWebview extends StatefulWidget {
 class _NewsDetailsWebviewState extends State<NewsDetailsWebview> {
   late WebViewController _webViewController;
   double _progress = 0.0;
-  final url =
-      "https://www.dailythanthi.com/news/tamilnadu/todays-important-news-in-a-few-lines-15-03-2025-1148083";
+ 
   @override
   Widget build(BuildContext context) {
     final Color color = Utils(context).getColor;
@@ -46,7 +45,9 @@ class _NewsDetailsWebviewState extends State<NewsDetailsWebview> {
           backgroundColor: Theme.of(context).scaffoldBackgroundColor,
           elevation: 0,
           centerTitle: true,
-          title: Text("URL", style: TextStyle(color: color)),
+          title: Text(
+            widget.url, 
+          style: TextStyle(color: color)),
           actions: [
             IconButton(
               onPressed: () async {
@@ -65,7 +66,7 @@ class _NewsDetailsWebviewState extends State<NewsDetailsWebview> {
             ),
             Expanded(
               child: WebView(
-                initialUrl: Uri.parse(url),
+                initialUrl:widget.url,
                 zoomEnabled: true,
                 onprocess: (progress) {
                   setState(() {
@@ -122,7 +123,7 @@ class _NewsDetailsWebviewState extends State<NewsDetailsWebview> {
                 title: Text('Share'),
                 onTap: () async {
                   try {
-                    await Share.share('Url', subject: 'Look what I made!');
+                    await Share.share(widget.url, subject: 'Look what I made!');
                   } catch (err) {
                     GlobalMethods.errorDialog(
                       errorMessage: err.toString(),
@@ -135,8 +136,8 @@ class _NewsDetailsWebviewState extends State<NewsDetailsWebview> {
                 leading: Icon(Icons.open_in_browser),
                 title: Text('Open in browser'),
                 onTap: () async {
-                  if (!await launchUrl(Uri.parse(url)))
-                    throw 'Could not launch $url';
+                  if (!await launchUrl(Uri.parse(widget.url)))
+                    throw 'Could not launch ${widget.url}';
                 },
               ),
               ListTile(
@@ -168,7 +169,7 @@ class WebView extends StatelessWidget {
     required this.onWebViewCreated,
     required this.onprocess,
   });
-  final Uri initialUrl;
+  final String initialUrl;
   final bool zoomEnabled;
   final dynamic onWebViewCreated;
   final dynamic onprocess;

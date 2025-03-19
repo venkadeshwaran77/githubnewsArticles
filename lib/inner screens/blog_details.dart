@@ -2,8 +2,12 @@ import 'package:fancy_shimmer_image/fancy_shimmer_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_iconly/flutter_iconly.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:news_articles/provider/news_provider.dart';
+import 'package:news_articles/services/global_method.dart';
 import 'package:news_articles/services/utiles.dart';
 import 'package:news_articles/widgets/verticle_spacing.dart';
+import 'package:provider/provider.dart';
+import 'package:share_plus/share_plus.dart';
 
 import '../const/styles.dart';
 
@@ -19,6 +23,9 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
   @override
   Widget build(BuildContext context) {
     final color = Utils(context).getColor;
+    final newsProvider = Provider.of<NewsProvider>(context);
+    final publishedAt = ModalRoute.of(context)!.settings.arguments as String;
+    final currentNews = newsProvider.findByDate(publishedAt: publishedAt);
     return Scaffold(
       appBar: AppBar(
         iconTheme: IconThemeData(color: color),
@@ -26,7 +33,7 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         centerTitle: true,
         title: Text(
-          "By Author",
+          "By ${currentNews.authorName}",
           textAlign: TextAlign.center,
           style: TextStyle(color: color),
         ),
@@ -47,18 +54,21 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "Title" * 10,
+                  currentNews.title,
                   textAlign: TextAlign.justify,
                   style: titleTextStyle,
                 ),
                 VerticleSpacing(25),
                 Row(
                   children: [
-                    Text("17/03/2025",
-                     style:smallTextStyle),
+                    Text(
+                      currentNews.dateToShow, 
+                    style: smallTextStyle
+                    ),
                     Spacer(),
-                    Text("readingTimeText", 
-                    style:smallTextStyle),
+                    Text(
+                      currentNews.readingTimeText,
+                     style: smallTextStyle),
                   ],
                 ),
                 VerticleSpacing(20),
@@ -66,61 +76,70 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
             ),
           ),
           Stack(
-           children: [
-            SizedBox(
-              width:double.infinity,
-              child: Padding(
-                padding: const EdgeInsets.only(bottom:25),
-                child: FancyShimmerImage(
-                  boxFit: BoxFit.fill,
-               errorWidget:Image.asset('assets/img/emty.jpg'),
-                imageUrl:
-              "https://techcrunch.com/wp-content/uploads/2022/01/locket-app.jpg?resize=1536,864",
-              ),
-              ),
-            ),
-            Positioned(
-              bottom:0,
-              right:10,
-              child: Padding(
-                padding: const EdgeInsets.only(right:10),
-                child: Row(
-                  children: [
-                    GestureDetector(
-                      onTap:(){},
-                      child:Card(
-                      elevation:10,
-                      shape:CircleBorder(),
-                      child:Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Icon(
-                        IconlyLight.send,
-                        size:28,
-                        color:color,
-                        ),
-                      ),
-                      ),
-                    ),
-                     GestureDetector(
-                      onTap:(){},
-                      child:Card(
-                      elevation:10,
-                      shape:CircleBorder(),
-                      child:Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Icon(
-                        IconlyLight.bookmark,
-                        size:28,
-                        color:color,
-                        ),
-                      ),
-                      ),
-                    ),
-                  ],
+            children: [
+              SizedBox(
+                width: double.infinity,
+                child: Padding(
+                  padding: const EdgeInsets.only(bottom: 25),
+                  child: FancyShimmerImage(
+                    boxFit: BoxFit.fill,
+                    errorWidget: Image.asset('assets/img/emty.jpg'),
+                    imageUrl:
+                        currentNews.urlToImage,
+                  ),
                 ),
               ),
-            ),
-           ],
+              Positioned(
+                bottom: 0,
+                right: 10,
+                child: Padding(
+                  padding: const EdgeInsets.only(right: 10),
+                  child: Row(
+                    children: [
+                      GestureDetector(
+                        onTap: ()async {
+                  try {
+                    await Share.share(currentNews.url, subject: 'Look what I made!');
+                  } catch (err) {
+                    GlobalMethods.errorDialog(
+                      errorMessage: err.toString(),
+                      context: context,
+                     );
+                     }
+                      },
+                        child: Card(
+                          elevation: 10,
+                          shape: CircleBorder(),
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Icon(
+                              IconlyLight.send,
+                              size: 28,
+                              color: color,
+                            ),
+                          ),
+                        ),
+                      ),
+                      GestureDetector(
+                        onTap: () {},
+                        child: Card(
+                          elevation: 10,
+                          shape: CircleBorder(),
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Icon(
+                              IconlyLight.bookmark,
+                              size: 28,
+                              color: color,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
           ),
           VerticleSpacing(20),
           Padding(
@@ -135,7 +154,7 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
                 ),
                 VerticleSpacing(10),
                 TextContent(
-                  label: "description" * 12,
+                  label: currentNews.description,
                   fontSize: 18,
                   fontWeight: FontWeight.normal,
                 ),
@@ -147,7 +166,7 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
                 ),
                 VerticleSpacing(10),
                 TextContent(
-                  label: 'content' * 12,
+                  label: currentNews.content,
                   fontSize: 18,
                   fontWeight: FontWeight.normal,
                 ),
@@ -175,8 +194,8 @@ class TextContent extends StatelessWidget {
   Widget build(BuildContext context) {
     return SelectableText(
       label,
-      textAlign:TextAlign.justify,
-      style:GoogleFonts.roboto(fontSize:fontSize,fontWeight:fontWeight),
+      textAlign: TextAlign.justify,
+      style: GoogleFonts.roboto(fontSize: fontSize, fontWeight: fontWeight),
     );
   }
 }

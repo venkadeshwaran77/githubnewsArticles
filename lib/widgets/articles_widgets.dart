@@ -3,23 +3,26 @@ import 'package:flutter/material.dart';
 import 'package:news_articles/const/vars.dart';
 import 'package:news_articles/inner%20screens/blog_details.dart';
 import 'package:news_articles/inner%20screens/news_details_webview.dart';
+import 'package:news_articles/models/news_model.dart';
 import 'package:news_articles/services/utiles.dart';
 import 'package:news_articles/widgets/verticle_spacing.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:provider/provider.dart';
 
 class ArticlesWidgets extends StatelessWidget {
-  const ArticlesWidgets({super.key, required this.imageUrl});
-  final String imageUrl;
+  const ArticlesWidgets({super.key});
+ // final String imageUrl, title, url, dateToShow,readingTime;
   @override
   Widget build(BuildContext context) {
     Size size = Utils(context).getScreenSize;
+     final newsModelProvider = Provider.of<NewsModel>(context);
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Material(
         color: Theme.of(context).cardColor,
         child: GestureDetector(
           onTap: () {
-            Navigator.pushNamed(context, NewsDetailsScreen.routeName);
+            Navigator.pushNamed(context, NewsDetailsScreen.routeName,arguments:newsModelProvider.publishedAt);
           },
           child: Stack(
             children: [
@@ -50,8 +53,7 @@ class ArticlesWidgets extends StatelessWidget {
                         width: size.height * 0.12,
                         boxFit: BoxFit.fill,
                         errorWidget: Image.asset('assets/img/emty.jpg'),
-                        imageUrl:
-                            imageUrl,
+                        imageUrl: newsModelProvider.urlToImage,
                       ),
                     ),
                     SizedBox(width: 10),
@@ -61,7 +63,7 @@ class ArticlesWidgets extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           Text(
-                            ' title ' * 100,
+                           newsModelProvider.title,
                             textAlign: TextAlign.justify,
                             style: smallTextStyle,
                             maxLines: 2,
@@ -71,7 +73,7 @@ class ArticlesWidgets extends StatelessWidget {
                           Align(
                             alignment: Alignment.topRight,
                             child: Text(
-                              '⏳ Reading time',
+                              '⏳ ${newsModelProvider.readingTimeText}',
                               style: smallTextStyle,
                             ),
                           ),
@@ -84,7 +86,7 @@ class ArticlesWidgets extends StatelessWidget {
                                       context,
                                       PageTransition(
                                         type: PageTransitionType.rightToLeft,
-                                        child: NewsDetailsWebview(),
+                                        child: NewsDetailsWebview(url:newsModelProvider.url),
                                         inheritTheme: true,
                                         ctx: context,
                                       ),
@@ -93,7 +95,7 @@ class ArticlesWidgets extends StatelessWidget {
                                   icon: Icon(Icons.link, color: Colors.blue),
                                 ),
                                 Text(
-                                  '13-03-2025 ' * 2,
+                                  newsModelProvider.dateToShow,
                                   maxLines: 1,
                                   style: smallTextStyle,
                                 ),

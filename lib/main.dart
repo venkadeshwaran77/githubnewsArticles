@@ -3,6 +3,7 @@ import 'package:news_articles/auth/login_page.dart';
 import 'package:news_articles/auth/signup_page.dart';
 import 'package:news_articles/home_screen.dart';
 import 'package:news_articles/inner%20screens/blog_details.dart';
+import 'package:news_articles/provider/news_provider.dart';
 import 'package:news_articles/provider/theme_provider.dart';
 import 'package:news_articles/thems/theme_data.dart'; 
 import 'package:news_articles/welcome_screen.dart';
@@ -41,8 +42,9 @@ class _MyAppState extends State<MyApp> {
         ChangeNotifierProvider(
           create: (_) {
             return themeChangeProvider;
-          },
-        ),
+          }),
+          ChangeNotifierProvider(create:(_) => NewsProvider(),
+          )
       ],
       child: Consumer<ThemeProvider>(
         builder: (context, themeChangeProvider, ch) {
@@ -57,7 +59,7 @@ class _MyAppState extends State<MyApp> {
               'welcome_screen': (context) => WelcomeScreen(),
               'login_screen': (context) => LogInScreen(),
               'signup_screen': (context) => SignupScreen(),
-              'home_screen': (context) => NewsScreen(),
+              'home_screen': (context) => HomeScreen(),
               NewsDetailsScreen.routeName:(context) => NewsDetailsScreen(),
             },
           );
