@@ -22,6 +22,7 @@ class ArticlesWidgets extends StatelessWidget {
         color: Theme.of(context).cardColor,
         child: GestureDetector(
           onTap: () {
+            // Navigate to the in app details screen
             Navigator.pushNamed(context, NewsDetailsScreen.routeName,arguments:newsModelProvider.publishedAt);
           },
           child: Stack(
@@ -48,12 +49,15 @@ class ArticlesWidgets extends StatelessWidget {
                   children: [
                     ClipRRect(
                       borderRadius: BorderRadius.circular(10),
-                      child: FancyShimmerImage(
-                        height: size.height * 0.12,
-                        width: size.height * 0.12,
-                        boxFit: BoxFit.fill,
-                        errorWidget: Image.asset('assets/img/emty.jpg'),
-                        imageUrl: newsModelProvider.urlToImage,
+                      child: Hero(
+                        tag: newsModelProvider.publishedAt,
+                        child: FancyShimmerImage(
+                          height: size.height * 0.12,
+                          width: size.height * 0.12,
+                          boxFit: BoxFit.fill,
+                          errorWidget: Image.asset('assets/img/emty.jpg'),
+                          imageUrl: newsModelProvider.urlToImage,
+                        ),
                       ),
                     ),
                     SizedBox(width: 10),

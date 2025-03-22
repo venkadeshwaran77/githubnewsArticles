@@ -1,3 +1,4 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:news_articles/auth/login_page.dart';
 import 'package:news_articles/auth/signup_page.dart';
@@ -5,11 +6,13 @@ import 'package:news_articles/home_screen.dart';
 import 'package:news_articles/inner%20screens/blog_details.dart';
 import 'package:news_articles/provider/news_provider.dart';
 import 'package:news_articles/provider/theme_provider.dart';
-import 'package:news_articles/thems/theme_data.dart'; 
+import 'package:news_articles/thems/theme_data.dart';
 import 'package:news_articles/welcome_screen.dart';
 import 'package:provider/provider.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(MyApp());
 }
 
@@ -23,13 +26,12 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   ThemeProvider themeChangeProvider = ThemeProvider();
 
-  
-
   @override
   void initState() {
     getCurrentAppTheme();
     super.initState();
   }
+
   void getCurrentAppTheme() async {
     themeChangeProvider.setDarkTheme =
         await themeChangeProvider.darkThemePreferences.getTheme();
@@ -42,17 +44,17 @@ class _MyAppState extends State<MyApp> {
         ChangeNotifierProvider(
           create: (_) {
             return themeChangeProvider;
-          }),
-          ChangeNotifierProvider(create:(_) => NewsProvider(),
-          )
+          },
+        ),
+        ChangeNotifierProvider(create: (_) => NewsProvider()),
       ],
       child: Consumer<ThemeProvider>(
         builder: (context, themeChangeProvider, ch) {
           return MaterialApp(
             debugShowCheckedModeBanner: false,
-            title:'News App',
+            title: 'News App',
             theme: style.themeData(themeChangeProvider.getDarkTheme, context),
-            
+
             //home:WelcomeScreen(),
             initialRoute: 'welcome_screen',
             routes: {
@@ -60,7 +62,7 @@ class _MyAppState extends State<MyApp> {
               'login_screen': (context) => LogInScreen(),
               'signup_screen': (context) => SignupScreen(),
               'home_screen': (context) => HomeScreen(),
-              NewsDetailsScreen.routeName:(context) => NewsDetailsScreen(),
+              NewsDetailsScreen.routeName: (context) => NewsDetailsScreen(),
             },
           );
         },

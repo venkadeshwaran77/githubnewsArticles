@@ -8,7 +8,6 @@ import 'package:news_articles/services/utiles.dart';
 import 'package:news_articles/widgets/verticle_spacing.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
-
 import '../const/styles.dart';
 
 class NewsDetailsScreen extends StatefulWidget {
@@ -81,11 +80,14 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
                 width: double.infinity,
                 child: Padding(
                   padding: const EdgeInsets.only(bottom: 25),
-                  child: FancyShimmerImage(
-                    boxFit: BoxFit.fill,
-                    errorWidget: Image.asset('assets/img/emty.jpg'),
-                    imageUrl:
-                        currentNews.urlToImage,
+                  child: Hero(
+                    tag:currentNews.publishedAt,
+                    child: FancyShimmerImage(
+                      boxFit: BoxFit.fill,
+                      errorWidget: Image.asset('assets/img/emty.jpg'),
+                      imageUrl:
+                          currentNews.urlToImage,
+                    ),
                   ),
                 ),
               ),
