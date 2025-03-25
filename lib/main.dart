@@ -4,6 +4,7 @@ import 'package:news_articles/auth/login_page.dart';
 import 'package:news_articles/auth/signup_page.dart';
 import 'package:news_articles/home_screen.dart';
 import 'package:news_articles/inner%20screens/blog_details.dart';
+import 'package:news_articles/provider/bookmarks_provider.dart';
 import 'package:news_articles/provider/news_provider.dart';
 import 'package:news_articles/provider/theme_provider.dart';
 import 'package:news_articles/thems/theme_data.dart';
@@ -46,7 +47,12 @@ class _MyAppState extends State<MyApp> {
             return themeChangeProvider;
           },
         ),
-        ChangeNotifierProvider(create: (_) => NewsProvider()),
+        ChangeNotifierProvider(
+          create: (_) => NewsProvider(),
+        ),
+         ChangeNotifierProvider(
+          create: (_) =>BookmarksProvider(),
+        ),  
       ],
       child: Consumer<ThemeProvider>(
         builder: (context, themeChangeProvider, ch) {
