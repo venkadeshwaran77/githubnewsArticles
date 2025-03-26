@@ -124,13 +124,14 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
                       ),
                       GestureDetector(
                         onTap: () async {
-                          if (!isInBookmark) {
-                            await bookmarksProvider.deleteBookmark();
-                          } else {
-                            await bookmarksProvider.addToBookmark(
+                           await bookmarksProvider.addToBookmark(
                               newsModel: currentNews,
                             );
-                          }
+                           /*if (!isInBookmark) {
+                            await bookmarksProvider.deleteBookmark();
+                          } else {
+                           
+                          } */
                         },
                         child: Card(
                           elevation: 10,

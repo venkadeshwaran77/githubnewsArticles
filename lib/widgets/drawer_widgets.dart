@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_iconly/flutter_iconly.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:news_articles/home_screen.dart';
 import 'package:news_articles/inner%20screens/bookmark_screen.dart';
 import 'package:news_articles/provider/theme_provider.dart';
 import 'package:news_articles/widgets/verticle_spacing.dart';
@@ -51,12 +52,21 @@ class _DrawerWidgetsState extends State<DrawerWidgets> {
             ),
             VerticleSpacing(20),
             ListTilesWidget(lable: 'Home', 
-            icon: IconlyBold.home, fct: () {}),
+            icon: IconlyBold.home, fct: () {
+               Navigator.pushReplacement(
+                  context, PageTransition(
+                type: PageTransitionType.rightToLeft,
+                child:HomeScreen(),
+                inheritTheme:true,
+                ctx:context
+                ),
+                );
+            }),
                ListTilesWidget(
               lable: 'Bookmark',
               icon: IconlyBold.bookmark,
               fct: () {
-                 Navigator.push(
+                 Navigator.pushReplacement(
                   context, PageTransition(
                 type: PageTransitionType.rightToLeft,
                 child:BookmarkScreen(),

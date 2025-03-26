@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:news_articles/const/vars.dart';
 import 'package:news_articles/inner%20screens/blog_details.dart';
 import 'package:news_articles/inner%20screens/news_details_webview.dart';
+import 'package:news_articles/models/bookmarks_model.dart';
 import 'package:news_articles/models/news_model.dart';
 import 'package:news_articles/services/utiles.dart';
 import 'package:news_articles/widgets/verticle_spacing.dart';
@@ -10,12 +11,16 @@ import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 
 class ArticlesWidgets extends StatelessWidget {
-  const ArticlesWidgets({super.key});
- // final String imageUrl, title, url, dateToShow,readingTime;
+  const ArticlesWidgets({super.key, this.isBookmark = false});
+  // final String imageUrl, title, url, dateToShow,readingTime;
+  final bool isBookmark;
   @override
   Widget build(BuildContext context) {
     Size size = Utils(context).getScreenSize;
-     final newsModelProvider = Provider.of<NewsModel>(context);
+    dynamic newsModelProvider =
+        isBookmark
+            ? Provider.of<BookmarksModel>(context)
+            : Provider.of<NewsModel>(context);
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Material(
@@ -23,7 +28,11 @@ class ArticlesWidgets extends StatelessWidget {
         child: GestureDetector(
           onTap: () {
             // Navigate to the in app details screen
-            Navigator.pushNamed(context, NewsDetailsScreen.routeName,arguments:newsModelProvider.publishedAt);
+            Navigator.pushNamed(
+              context,
+              NewsDetailsScreen.routeName,
+              arguments: newsModelProvider.publishedAt,
+            );
           },
           child: Stack(
             children: [
@@ -67,7 +76,7 @@ class ArticlesWidgets extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           Text(
-                           newsModelProvider.title,
+                            newsModelProvider.title,
                             textAlign: TextAlign.justify,
                             style: smallTextStyle,
                             maxLines: 2,
@@ -90,7 +99,9 @@ class ArticlesWidgets extends StatelessWidget {
                                       context,
                                       PageTransition(
                                         type: PageTransitionType.rightToLeft,
-                                        child: NewsDetailsWebview(url:newsModelProvider.url),
+                                        child: NewsDetailsWebview(
+                                          url: newsModelProvider.url,
+                                        ),
                                         inheritTheme: true,
                                         ctx: context,
                                       ),

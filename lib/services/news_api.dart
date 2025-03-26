@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 import 'package:news_articles/const/api_const.dart';
+import 'package:news_articles/models/bookmarks_model.dart';
 import 'package:news_articles/models/news_model.dart';
 import 'package:http/http.dart' as http;
 
@@ -41,21 +42,17 @@ class NewsApiServices {
       throw error.toString();
     }
   }
-  static Future<List<NewsModel>> getTopHeadlines(
-  
-  ) async {
+
+  static Future<List<NewsModel>> getTopHeadlines() async {
     //var url = Uri.parse(
     //'https://newsapi.org/v2/top-headlines?country=us&apiKey=');
     try {
       var uri = Uri.https(BASEURL, "v2/top-headlines", {
-        'country':'us'
+        'country': 'us',
 
         // "apiKEY" : API_KEY
       });
-      var response = await http.get(
-        uri, 
-        headers: {"X-Api-key": API_KEY}
-        );
+      var response = await http.get(uri, headers: {"X-Api-key": API_KEY});
       log('Response status: ${response.statusCode}');
       //log('Response body: ${response.body}');
       Map data = jsonDecode(response.body);
@@ -75,11 +72,8 @@ class NewsApiServices {
       throw error.toString();
     }
   }
-   static Future<List<NewsModel>> searchNews({
-    
-    required String query,
-  }) async {
-    
+
+  static Future<List<NewsModel>> searchNews({required String query}) async {
     try {
       var uri = Uri.https(BASEURL, "v2/everything", {
         "q": query,
@@ -104,6 +98,29 @@ class NewsApiServices {
       return NewsModel.newsFromSnapshot(newsTempList);
     } catch (error) {
       throw error.toString();
+    }
+  }
+
+  static Future<List<BookmarksModel>?> getBookmarks() async {
+    try {
+      var uri = Uri.https(BASEURL_FIREBASE, "bookmarks.json");
+      var response = await http.get(uri);
+      // log('Response status: ${response.statusCode}');
+      //log('Response body: ${response.body}');
+      Map data = jsonDecode(response.body);
+      List allKeys = [];
+
+      if (data['code'] != null) {
+        throw HttpException(data['code']);
+        // throw data['message'];
+      }
+      for(String key in data.keys){
+        allKeys.add(key);
+      }
+      log('allKeys $allKeys');
+      return BookmarksModel.bookmarksFromSnapshot(json:data, allKeys:allKeys);
+    } catch (error) {
+  
     }
   }
 }

@@ -1,8 +1,10 @@
 import 'package:card_swiper/card_swiper.dart';
 import 'package:flutter/material.dart';
 import 'package:news_articles/const/vars.dart';
+import 'package:news_articles/provider/bookmarks_provider.dart';
 import 'package:news_articles/services/utiles.dart';
 import 'package:news_articles/widgets/verticle_spacing.dart';
+import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
 
 class LoadingWidgets extends StatefulWidget {
@@ -22,47 +24,48 @@ class _LoadingWidgetsState extends State<LoadingWidgets> {
     baseShimmerColor = utils.baseShimmerColor;
     highlightShimmerColor = utils.highlightShimmerColor;
     widgetShimmerColor = utils.widgetShimmerColor;
+    Provider.of<BookmarksProvider>(context, listen: false).fetchBookmarks();
     super.didChangeDependencies();
   }
 
   @override
   Widget build(BuildContext context) {
     Size size = Utils(context).getScreenSize;
-    return widget.newsType == NewsType.topTrending ? Swiper(
-      autoplayDelay: 8000,
-      autoplay: true,
-      itemWidth: size.width * 0.9,
-      layout: SwiperLayout.STACK,
-      viewportFraction: 0.9,
-      itemCount: 5,
-      itemBuilder: (context, index) {
-        return TopTrendingLoadingWidget(
-          baseShimmerColor: baseShimmerColor,
-          highlightShimmerColor: highlightShimmerColor,
-          size: size,
-          widgetShimmerColor: widgetShimmerColor,
-          borderRadius: borderRadius,
+    return widget.newsType == NewsType.topTrending
+        ? Swiper(
+          autoplayDelay: 8000,
+          autoplay: true,
+          itemWidth: size.width * 0.9,
+          layout: SwiperLayout.STACK,
+          viewportFraction: 0.9,
+          itemCount: 5,
+          itemBuilder: (context, index) {
+            return TopTrendingLoadingWidget(
+              baseShimmerColor: baseShimmerColor,
+              highlightShimmerColor: highlightShimmerColor,
+              size: size,
+              widgetShimmerColor: widgetShimmerColor,
+              borderRadius: borderRadius,
+            );
+          },
+        )
+        : Expanded(
+          child: ListView.builder(
+            // you can add these 2 lines for better performance
+            shrinkWrap: true,
+            physics: NeverScrollableScrollPhysics(),
+            itemCount: 20,
+            itemBuilder: (context, index) {
+              return ArticleShimmerWidget(
+                baseShimmerColor: baseShimmerColor,
+                highlightShimmerColor: highlightShimmerColor,
+                widgetShimmerColor: widgetShimmerColor,
+                size: size,
+                borderRadius: borderRadius,
+              );
+            },
+          ),
         );
-      },
-    ): Expanded(
-     child: ListView.builder(
-     // you can add these 2 lines for better performance
-      shrinkWrap:true,
-      physics: NeverScrollableScrollPhysics(),
-        itemCount: 20,
-        itemBuilder: (context, index) {
-          return  ArticleShimmerWidget(
-      baseShimmerColor: baseShimmerColor,
-      highlightShimmerColor: highlightShimmerColor,
-      widgetShimmerColor: widgetShimmerColor,
-      size: size,
-      borderRadius: borderRadius,
-    );
-        },
-      ),
-    );
-
-    
   }
 }
 
